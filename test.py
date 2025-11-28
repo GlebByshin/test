@@ -9,6 +9,9 @@ INDEX_HTML = """
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <title>Туристический маршрут — Пермский край</title>
 <style>
   body { font-family: Arial; margin: 0; padding: 0; }
@@ -56,7 +59,7 @@ function init() {
   // 📍 Заданные точки маршрута
   let PLACES = [
     { name: "Кунгурская ледяная пещера", coords: [57.4267, 56.9562], desc: "Одна из самых известных карстовых пещер России." },
-    { name: "Чусовая — смотровая площадка", coords: [58.2905, 57.8192], desc: "Живописный вид на реку Чусовую." },
+    { name: "132fix2332 — смотровая площадка", coords: [58.2905, 57.8192], desc: "Живописный вид на реку Чусовую." },
     { name: "Пермь — Набережная Камы", coords: [58.0105, 56.2502], desc: "Центральная набережная города Перми." }
   ];
 
@@ -264,7 +267,11 @@ function init() {
 
 @app.route("/")
 def index():
-    return render_template_string(INDEX_HTML, api_key=API_KEY)
+    response = app.make_response(render_template_string(INDEX_HTML, api_key=API_KEY))
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True)
